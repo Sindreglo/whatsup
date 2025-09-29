@@ -1,13 +1,13 @@
 import styles from './page.module.css';
 
-export default function Home() {
+export default function Channel() {
   return (
     <main className={styles.container}>
-      <h1>Success!!!</h1>
-      <p>Du er inne.</p>
-      <a href="/channel">
+      <h1>Channel Page</h1>
+      <p>Welcome to the channel!</p>
+      <a href="/">
         <button className="button">
-          Go to Channel
+          Back to Home
         </button>
       </a>
     </main>
