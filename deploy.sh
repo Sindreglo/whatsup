@@ -4,7 +4,7 @@
 set -e
 
 BUILD_DIR="out"
-BRANCH="Production"
+BRANCH="Hosting"
 
 # Make sure build is up to date
 npm run build
