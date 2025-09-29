@@ -7,17 +7,16 @@ body {
 }
 
 .button {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin: 20px;
-  background-color: #0070f3;
+  padding: 12px 48px;
+  font-size: 14px;
+  background-color: #3E6AE2;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: border-color .33s ease, background-color .33s ease, color .33s ease, box-shadow .25s ease;
 }
 
 .button:hover {
-  background-color: #0051b3;
+  background-color: #3457b1;
 }
