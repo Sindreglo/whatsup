@@ -10,7 +10,6 @@ export default function Channel() {
   
   const blocks = Array.from({ length: blockCount }, (_, index) => ({
     title: `User ${index + 1}`,
-    content: `Content for User ${index + 1}`,
   }));
 
   return (
