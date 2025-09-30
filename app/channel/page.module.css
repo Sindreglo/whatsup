@@ -5,4 +5,18 @@
   padding: 4px;
   flex-direction: column;
   box-sizing: border-box;
+  background-color: black;
+}
+
+.dropdown {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.select {
+  padding: 8px 16px;
+  font-size: 16px;
 }
