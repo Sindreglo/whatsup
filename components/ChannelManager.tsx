@@ -11,6 +11,7 @@ interface ChannelManagerProps {
 export default function ChannelManager({ channelName }: ChannelManagerProps) {
   const appId = process.env.PUBLIC_AGORA_APP_ID || '';
   const [isJoined, setIsJoined] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const [uid, setUid] = useState<string | number>('');
 
   // Generate a random user ID
@@ -41,6 +42,14 @@ export default function ChannelManager({ channelName }: ChannelManagerProps) {
     setIsJoined(false);
   };
 
+  const handleToggleMute = async () => {
+    if (localMicrophoneTrack) {
+      const newMutedState = !isMuted;
+      await localMicrophoneTrack.setEnabled(!newMutedState);
+      setIsMuted(newMutedState);
+    }
+  };
+
   if (!isJoined) {
     return (
       <div style={{ 
@@ -67,6 +76,21 @@ export default function ChannelManager({ channelName }: ChannelManagerProps) {
         localCameraTrack={localCameraTrack}
         localMicrophoneTrack={localMicrophoneTrack}
       />
+      {/* Mute button */}
+      <button 
+        className={` ${isMuted ? 'backgroundColorRed' : 'backgroundColorPrimary'}`}
+        onClick={handleToggleMute}
+        style={{ 
+          position: 'fixed', 
+          bottom: '20px', 
+          right: '20px',
+          zIndex: 1000 
+        }}
+        aria-label={isMuted ? 'Unmute' : 'Mute'}
+      >
+        {isMuted ? '🔇' : '🎤'}
+      </button>
+      {/* Leave button */}
       <button 
         className="iconButton backgroundColorRed" 
         onClick={handleLeave}

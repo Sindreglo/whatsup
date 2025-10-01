@@ -16,11 +16,6 @@ export default function Channel() {
       <AgoraRTCProvider client={client as any}>
         <ChannelManager channelName={channelName} />
       </AgoraRTCProvider>
-      <a href="/">
-        <button className="iconButton backgroundColorRed" aria-label="Back to Home">
-          📞
-        </button>
-      </a>
     </main>
   );
 }
