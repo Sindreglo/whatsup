@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main className={styles.container}>
       <h1>Success!!!</h1>
-      <p>Du er inne.</p>
+      <p>ugh.</p>
       <a href="/channel">
         <button className="button">
           Go to Channel
