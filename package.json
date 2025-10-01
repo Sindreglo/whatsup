@@ -10,6 +10,8 @@
     "deploy": "chmod +x deploy.sh && ./deploy.sh"
   },
   "dependencies": {
+    "agora-rtc-react": "^2.5.0",
+    "agora-rtc-sdk-ng": "^4.24.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
