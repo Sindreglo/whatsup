@@ -28,6 +28,10 @@ export default function Channel() {
         </select>
       </div>
       <GridLayout blocks={blocks} />
+      {/* Self preview placeholder (future local video) */}
+      <div className={styles.selfPreview} aria-label="Your preview window">
+        <div className={styles.nameLabel}>You</div>
+      </div>
       <a href="/">
         <button className="iconButton backgroundColorRed" aria-label="Back to Home">
           <BsFillTelephoneFill className="icon" />

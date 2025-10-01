@@ -11,7 +11,7 @@ export default function GridLayout({ blocks }: GridLayoutProps) {
     <div className={styles.gridContainer} data-count={blocks.length}>
       {blocks.map((block, index) => (
         <div key={index} className={styles.gridItem}>
-          <h2>{block.title}</h2>
+          <div className={styles.nameLabel}>{block.title}</div>
         </div>
       ))}
     </div>
