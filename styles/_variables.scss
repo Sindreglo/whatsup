@@ -1,6 +1,8 @@
+@use "sass:color";
+
 // Central design tokens
 $color-primary: #0073FF;
-$color-primary-hover: darken($color-primary, 8%);
+$color-primary-hover: color.adjust($color-primary, $lightness: -8%);
 $color-danger: #e2463e;
 $color-bg: #fafafa;
 $radius-sm: 4px;

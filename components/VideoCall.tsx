@@ -12,11 +12,17 @@ interface VideoCallProps {
 export default function VideoCall({ channelName, localCameraTrack, localMicrophoneTrack }: VideoCallProps) {
   const remoteUsers = useRemoteUsers();
 
+  // Debug logging
+  console.log('Remote users:', remoteUsers.length, remoteUsers.map(u => u.uid));
+  console.log('Local tracks:', { camera: !!localCameraTrack, mic: !!localMicrophoneTrack });
+
   // Generate user blocks: local user + remote users
   const allUsers = [
     { type: 'local', uid: 'local' },
     ...remoteUsers.map(user => ({ type: 'remote', uid: user.uid }))
   ];
+
+  console.log('Total users to render:', allUsers.length);
 
   return (
     <div className={styles.videoGrid} data-count={allUsers.length}>

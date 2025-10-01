@@ -16,25 +16,54 @@ export default function ChannelManager({ channelName }: ChannelManagerProps) {
 
   // Generate a random user ID
   useEffect(() => {
-    setUid(Math.floor(Math.random() * 10000));
+    // Create a more unique UID using timestamp + random
+    const uniqueUid = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    setUid(uniqueUid);
+    console.log('Generated UID:', uniqueUid);
   }, []);
 
   // Agora hooks
   const { localCameraTrack } = useLocalCameraTrack(isJoined);
   const { localMicrophoneTrack } = useLocalMicrophoneTrack(isJoined);
   
-  // Join channel
-  useJoin({
+  // Join channel with error handling
+  const joinResult = useJoin({
     appid: appId,
     channel: channelName,
     token: null, // Using null for testing, implement token server for production
     uid: uid,
   }, isJoined);
 
-  // Publish local tracks
-  usePublish([localMicrophoneTrack, localCameraTrack], isJoined);
+  // Log join result
+  useEffect(() => {
+    if (isJoined) {
+      console.log('Join attempt result:', joinResult);
+      console.log('Joining channel:', channelName, 'with UID:', uid, 'AppID:', appId);
+    }
+  }, [isJoined, joinResult, channelName, uid, appId]);
+
+  // Publish local tracks - filter out null tracks
+  const tracksToPublish = [localMicrophoneTrack, localCameraTrack].filter(track => track !== null);
+  usePublish(tracksToPublish, isJoined);
+
+  // Debug logging
+  console.log('ChannelManager state:', { 
+    isJoined, 
+    appId: appId ? 'Set' : 'Missing', 
+    uid,
+    tracksReady: tracksToPublish.length 
+  });
 
   const handleJoin = () => {
+    if (!appId) {
+      console.error('App ID is missing!');
+      return;
+    }
+    if (!uid) {
+      console.error('UID not generated yet!');
+      return;
+    }
+    console.log('Attempting to join with:', { appId: appId.substring(0, 8) + '...', uid, channelName });
     setIsJoined(true);
   };
 
