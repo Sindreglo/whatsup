@@ -1,15 +1,34 @@
 import styles from './page.module.css';
+import { BsFillTelephoneFill } from 'react-icons/bs';
 
 export default function Home() {
   return (
     <main className={styles.container}>
-      <h1>Success!!!</h1>
-      <p>ugh.</p>
+        <header className={styles.header}>
+          <h1 className={styles.title}>
+            <span className={styles.icon}><BsFillTelephoneFill /></span>
+            WhatsUp
+          </h1>
+        </header>
+
       <a href="/channel">
         <button className="button">
           Go to Channel
         </button>
       </a>
+        <section className={styles.guide}>
+          <h2>Add WhatsUp to your homescreen</h2>
+          <ol>
+            <li>Tap the <b>⋮</b> menu (top right).</li>
+            <li>Choose <b>"Add to Home screen"</b>.</li>
+            <li>Confirm and drag the icon wherever you want.</li>
+          </ol>
+        </section>
+
+        <footer className={styles.footer}>
+          <small>Built with Next.js · Static exportable</small>
+        </footer>
+
     </main>
   );
 }
