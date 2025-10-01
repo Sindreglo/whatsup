@@ -41,11 +41,53 @@
   grid-template-rows: repeat(2, 1fr);
 }
 
-.gridContainer[data-count="5"],
 .gridContainer[data-count="6"] {
+  /* 6 items: simple 3x2 grid */
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
 }
+
+/*
+  Odd counts (5,7,9,11...) can leave a single empty cell if we use a simple
+  rectangular grid. To avoid gaps, we create a 60-column layout and make the
+  top row items span an equal number of columns and the bottom row items span
+  the remainder so both rows exactly fill the width.
+
+  The math we use is:
+    topCount = ceil(n / 2)
+    bottomCount = floor(n / 2)
+    topSpan = 60 / topCount
+    bottomSpan = 60 / bottomCount
+
+  We provide rules for common odd sizes. Add more sizes if you plan to support
+  higher participant counts.
+*/
+
+.gridContainer[data-count="5"],
+.gridContainer[data-count="7"],
+.gridContainer[data-count="9"],
+.gridContainer[data-count="11"] {
+  grid-template-columns: repeat(60, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  /* ensure equal row heights */
+  grid-auto-rows: 1fr;
+}
+
+/* 5 items -> top 3, bottom 2 */
+.gridContainer[data-count="5"] > :nth-child(-n+3) { grid-column: span 20; }
+.gridContainer[data-count="5"] > :nth-child(n+4)     { grid-column: span 30; }
+
+/* 7 items -> top 4, bottom 3 */
+.gridContainer[data-count="7"] > :nth-child(-n+4) { grid-column: span 15; }
+.gridContainer[data-count="7"] > :nth-child(n+5)  { grid-column: span 20; }
+
+/* 9 items -> top 5, bottom 4 */
+.gridContainer[data-count="9"] > :nth-child(-n+5) { grid-column: span 12; }
+.gridContainer[data-count="9"] > :nth-child(n+6)  { grid-column: span 15; }
+
+/* 11 items -> top 6, bottom 5 */
+.gridContainer[data-count="11"] > :nth-child(-n+6) { grid-column: span 10; }
+.gridContainer[data-count="11"] > :nth-child(n+7)  { grid-column: span 12; }
 
 .gridItem {
   background-color: #2c2c2c;
