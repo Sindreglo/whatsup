@@ -1,19 +1,18 @@
-import styles from './page.module.css';
-import { BsFillTelephoneFill } from 'react-icons/bs';
+import styles from './page.module.scss';
 
 export default function Home() {
   return (
     <main className={styles.container}>
         <header className={styles.header}>
           <h1 className={styles.title}>
-            <span className={styles.icon}><BsFillTelephoneFill /></span>
+            <img src="/social.png" alt="WhatsUp logo" className={styles.icon} />
             WhatsUp
           </h1>
         </header>
 
       <a href="/channel">
         <button className="button">
-          Go to Channel
+          Join Call
         </button>
       </a>
         <section className={styles.guide}>
@@ -28,7 +27,6 @@ export default function Home() {
         <footer className={styles.footer}>
           <small>Built with Next.js · Static exportable</small>
         </footer>
-
     </main>
   );
 }

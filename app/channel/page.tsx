@@ -1,6 +1,6 @@
 'use client';
 
-import styles from './page.module.css';
+import styles from './page.module.scss';
 import GridLayout from '../../components/GridLayout';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { useState } from 'react';
@@ -9,7 +9,7 @@ export default function Channel() {
   const [blockCount, setBlockCount] = useState(4);
   
   const blocks = Array.from({ length: blockCount }, (_, index) => ({
-    title: `User ${index + 1}`,
+    title: `Fake User ${index + 1}`,
   }));
 
   return (

@@ -1,4 +1,4 @@
-import styles from './GridLayout.module.css';
+import styles from './GridLayout.module.scss';
 
 interface GridLayoutProps {
   blocks: {
