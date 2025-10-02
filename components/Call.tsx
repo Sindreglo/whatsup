@@ -20,6 +20,7 @@ import {
   MdVideocam,
   MdVideocamOff,
 } from "react-icons/md";
+import { BsFillTelephoneFill } from 'react-icons/bs';
 import styles from './Call.module.scss';
 
 
@@ -45,7 +46,7 @@ function Call(props: { appId: string; channelName: string }) {
           onClick={() => (window.location.href = "/")}
           title="End Call"
         >
-          📞
+          <BsFillTelephoneFill className="icon" />
         </button>
         <button
           className={`${styles.controlButton} ${styles.micButton} ${!micOn ? styles.muted : ''}`}
@@ -124,7 +125,6 @@ function Videos(props: {
 
   return (
     <>
-      <div className={styles.videosContainer}>
         <div
           className={styles.remoteGrid}
           data-count={remoteUsers.length}
@@ -144,7 +144,6 @@ function Videos(props: {
               </div>
             ))}
         </div>
-      </div>
       <div className={styles.localVideo}>
         <LocalVideoTrack track={localCameraTrack} play={true} />
         <div className={styles.userLabel}>

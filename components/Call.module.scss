@@ -1,11 +1,5 @@
 @use '../styles/variables' as *;
 
-.callContainer {
-  width: 100%;
-  height: 100vh;
-  position: relative;
-}
-
 .videosContainer {
   display: flex;
   flex-direction: column;
@@ -22,7 +16,7 @@
   padding: 4px;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
+  height: 90vh;
 }
 
 /* Advanced grid layouts based on participant count (from VideoCall.module.scss) */
@@ -60,7 +54,9 @@
 .remoteUser {
   background-color: #2c2c2c;
   border-radius: 8px;
-  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -68,9 +64,6 @@
   overflow: hidden;
   position: relative;
   border: 1px solid rgba(255,255,255,0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .userLabel {
@@ -92,14 +85,16 @@
 
 .localVideo {
   position: fixed;
-  bottom: 80px;
-  right: 20px;
-  width: 180px;
-  aspect-ratio: 9/16;
+  right: 16px;
+  bottom: 16px;
+  width: 120px;
+  aspect-ratio: 10/16;
+  background: #1d1d1d;
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 8px;
   overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.12);
   z-index: 1200;
+  display: flex;
 }
 
 .controls {
