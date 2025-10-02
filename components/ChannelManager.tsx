@@ -12,53 +12,70 @@ interface ChannelManagerProps {
 export default function ChannelManager({ channelName, onLeave }: ChannelManagerProps) {
   const appId = process.env.NEXT_PUBLIC_AGORA_APP_ID || '';
   const [isMuted, setIsMuted] = useState(false);
-  const [uid, setUid] = useState<string | number>('');
-
-  // Generate a random user ID
-  useEffect(() => {
-    // Create a more unique UID using timestamp + random
-    const uniqueUid = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-    setUid(uniqueUid);
-    console.log('Generated UID:', uniqueUid);
-  }, []);
-
-  // Agora hooks - auto-start since component only renders when user wants to join
-  const { localCameraTrack } = useLocalCameraTrack(true);
-  const { localMicrophoneTrack } = useLocalMicrophoneTrack(true);
+  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   
-  // Join channel immediately when component mounts
+  // Generate a simple UID in valid range (like Call.tsx might be doing internally)
+  const [uid] = useState<number>(() => {
+    const simpleUid = Math.floor(Math.random() * 10000) + 1000; // 1000-10999
+    console.log('Generated simple UID:', simpleUid);
+    return simpleUid;
+  });
+
+  // Agora hooks - let Agora auto-assign UID
+  const { localCameraTrack } = useLocalCameraTrack();
+  const { localMicrophoneTrack } = useLocalMicrophoneTrack();
+  
+  // Enable/disable tracks based on state (like in Call.tsx)
+  useEffect(() => {
+    if (localCameraTrack) {
+      console.log('Setting camera track enabled:', isVideoEnabled);
+      localCameraTrack.setEnabled(isVideoEnabled);
+    }
+  }, [localCameraTrack, isVideoEnabled]);
+
+  useEffect(() => {
+    if (localMicrophoneTrack) {
+      console.log('Setting microphone track enabled:', !isMuted);
+      localMicrophoneTrack.setEnabled(!isMuted);
+    }
+  }, [localMicrophoneTrack, isMuted]);
+  
+  // Join channel with simple UID
   const joinResult = useJoin({
     appid: appId,
     channel: channelName,
     token: null,
     uid: uid,
-  }, true); // Always true since we only render when user wants to join
+  });
 
   // Log join result
   useEffect(() => {
     console.log('Auto-joining channel:', channelName, 'with UID:', uid, 'AppID:', appId ? 'Set' : 'Missing');
-  }, [channelName, uid, appId]);
+    console.log('Join result:', joinResult);
+  }, [channelName, appId, joinResult, uid]);
 
-  // Publish local tracks - filter out null tracks
-  const tracksToPublish = [localMicrophoneTrack, localCameraTrack].filter(track => track !== null);
-  usePublish(tracksToPublish, true);
+  // Publish local tracks (like in Call.tsx)
+  usePublish([localMicrophoneTrack, localCameraTrack]);
 
   // Debug logging for track publishing
   useEffect(() => {
-    if (tracksToPublish.length > 0) {
-      console.log('Publishing tracks:', {
-        camera: !!localCameraTrack,
-        microphone: !!localMicrophoneTrack,
-        totalTracks: tracksToPublish.length
-      });
-    }
-  }, [localCameraTrack, localMicrophoneTrack, tracksToPublish.length]);
+    console.log('Publishing tracks effect triggered:', {
+      camera: !!localCameraTrack,
+      microphone: !!localMicrophoneTrack,
+      cameraEnabled: localCameraTrack?.enabled,
+      micEnabled: localMicrophoneTrack?.enabled
+    });
+  }, [localCameraTrack, localMicrophoneTrack]);
 
   // Debug logging
   console.log('ChannelManager state:', { 
-    appId: appId ? 'Set' : 'Missing', 
-    uid,
-    tracksReady: tracksToPublish.length 
+    appId: appId ? 'Set' : 'Missing',
+    localTracks: {
+      camera: !!localCameraTrack,
+      cameraEnabled: localCameraTrack?.enabled,
+      microphone: !!localMicrophoneTrack,
+      microphoneEnabled: localMicrophoneTrack?.enabled
+    }
   });
 
   const handleLeave = () => {
@@ -75,6 +92,14 @@ export default function ChannelManager({ channelName, onLeave }: ChannelManagerP
     }
   };
 
+  const handleToggleVideo = async () => {
+    if (localCameraTrack) {
+      const newVideoState = !isVideoEnabled;
+      await localCameraTrack.setEnabled(newVideoState);
+      setIsVideoEnabled(newVideoState);
+    }
+  };
+
   return (
     <>
       <VideoCall 
@@ -82,9 +107,23 @@ export default function ChannelManager({ channelName, onLeave }: ChannelManagerP
         localCameraTrack={localCameraTrack}
         localMicrophoneTrack={localMicrophoneTrack}
       />
+      {/* Video toggle button */}
+      <button 
+        className={`${!isVideoEnabled ? 'backgroundColorRed' : 'backgroundColorPrimary'}`}
+        onClick={handleToggleVideo}
+        style={{ 
+          position: 'fixed', 
+          bottom: '20px', 
+          right: '80px',
+          zIndex: 1000 
+        }}
+        aria-label={isVideoEnabled ? 'Turn off video' : 'Turn on video'}
+      >
+        {isVideoEnabled ? '📹' : '📵'}
+      </button>
       {/* Mute button */}
       <button 
-        className={`iconButton ${isMuted ? 'backgroundColorRed' : 'backgroundColorPrimary'}`}
+        className={`${isMuted ? 'backgroundColorRed' : 'backgroundColorPrimary'}`}
         onClick={handleToggleMute}
         style={{ 
           position: 'fixed', 

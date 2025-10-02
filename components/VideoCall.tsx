@@ -13,7 +13,13 @@ export default function VideoCall({ channelName, localCameraTrack, localMicropho
   const remoteUsers = useRemoteUsers();
 
   // Debug logging
-  console.log('Remote users:', remoteUsers.length, remoteUsers.map(u => u.uid));
+  console.log('Remote users:', remoteUsers.length, remoteUsers.map(u => ({
+    uid: u.uid,
+    hasVideo: u.hasVideo,
+    hasAudio: u.hasAudio,
+    videoTrack: !!u.videoTrack,
+    audioTrack: !!u.audioTrack
+  })));
   console.log('Local tracks:', { camera: !!localCameraTrack, mic: !!localMicrophoneTrack });
 
   // Generate user blocks: local user + remote users
@@ -23,6 +29,7 @@ export default function VideoCall({ channelName, localCameraTrack, localMicropho
   ];
 
   console.log('Total users to render:', allUsers.length);
+
 
   return (
     <div className={styles.videoGrid} data-count={allUsers.length}>
@@ -45,16 +52,34 @@ export default function VideoCall({ channelName, localCameraTrack, localMicropho
             uid: user.uid,
             hasVideoTrack: !!remoteUser?.videoTrack,
             hasAudioTrack: !!remoteUser?.audioTrack,
-            userObject: remoteUser
+            userObject: remoteUser,
+            userExists: !!remoteUser
           });
+          
+          // Skip rendering if remote user object doesn't exist
+          if (!remoteUser) {
+            console.warn('Remote user not found for UID:', user.uid);
+            return (
+              <div key={user.uid} className={styles.videoItem}>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  backgroundColor: '#1a1a1a',
+                  color: 'white',
+                  width: '100%',
+                  height: '100%'
+                }}>
+                  Loading user {user.uid}...
+                </div>
+                <div className={styles.userLabel}>User {user.uid}</div>
+              </div>
+            );
+          }
           
           return (
             <div key={user.uid} className={styles.videoItem}>
-              <RemoteUser
-                user={remoteUser!}
-                playVideo={true}
-                playAudio={true}
-              />
+              <RemoteUser user={remoteUser} />
               <div className={styles.userLabel}>User {user.uid}</div>
             </div>
           );
