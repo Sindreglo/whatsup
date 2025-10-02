@@ -103,7 +103,9 @@ function Videos(props: {
   console.log('Remote users:', remoteUsers.length, remoteUsers.map(u => ({ 
     uid: u.uid, 
     hasVideo: u.hasVideo, 
-    hasAudio: u.hasAudio 
+    hasAudio: u.hasAudio,
+    videoTrack: !!u.videoTrack,
+    audioTrack: !!u.audioTrack
   })));
 
   usePublish([localMicrophoneTrack, localCameraTrack]);
@@ -130,11 +132,6 @@ function Videos(props: {
           data-count={remoteUsers.length}
         >
           {remoteUsers
-            .filter(
-              (user) =>
-                (user.hasVideo && user.videoTrack) ||
-                (user.hasAudio && user.audioTrack)
-            )
             .map((user) => (
               <div key={user.uid} className={styles.remoteUser}>
                 <RemoteUser user={user} />
