@@ -6,11 +6,11 @@ import VideoCall from './VideoCall';
 
 interface ChannelManagerProps {
   channelName: string;
+  onLeave?: () => void;
 }
 
-export default function ChannelManager({ channelName }: ChannelManagerProps) {
-  const appId = process.env.PUBLIC_AGORA_APP_ID || '';
-  const [isJoined, setIsJoined] = useState(false);
+export default function ChannelManager({ channelName, onLeave }: ChannelManagerProps) {
+  const appId = process.env.NEXT_PUBLIC_AGORA_APP_ID || '';
   const [isMuted, setIsMuted] = useState(false);
   const [uid, setUid] = useState<string | number>('');
 
@@ -22,53 +22,49 @@ export default function ChannelManager({ channelName }: ChannelManagerProps) {
     console.log('Generated UID:', uniqueUid);
   }, []);
 
-  // Agora hooks
-  const { localCameraTrack } = useLocalCameraTrack(isJoined);
-  const { localMicrophoneTrack } = useLocalMicrophoneTrack(isJoined);
+  // Agora hooks - auto-start since component only renders when user wants to join
+  const { localCameraTrack } = useLocalCameraTrack(true);
+  const { localMicrophoneTrack } = useLocalMicrophoneTrack(true);
   
-  // Join channel with error handling
+  // Join channel immediately when component mounts
   const joinResult = useJoin({
     appid: appId,
     channel: channelName,
-    token: null, // Using null for testing, implement token server for production
+    token: null,
     uid: uid,
-  }, isJoined);
+  }, true); // Always true since we only render when user wants to join
 
   // Log join result
   useEffect(() => {
-    if (isJoined) {
-      console.log('Join attempt result:', joinResult);
-      console.log('Joining channel:', channelName, 'with UID:', uid, 'AppID:', appId);
-    }
-  }, [isJoined, joinResult, channelName, uid, appId]);
+    console.log('Auto-joining channel:', channelName, 'with UID:', uid, 'AppID:', appId ? 'Set' : 'Missing');
+  }, [channelName, uid, appId]);
 
   // Publish local tracks - filter out null tracks
   const tracksToPublish = [localMicrophoneTrack, localCameraTrack].filter(track => track !== null);
-  usePublish(tracksToPublish, isJoined);
+  usePublish(tracksToPublish, true);
+
+  // Debug logging for track publishing
+  useEffect(() => {
+    if (tracksToPublish.length > 0) {
+      console.log('Publishing tracks:', {
+        camera: !!localCameraTrack,
+        microphone: !!localMicrophoneTrack,
+        totalTracks: tracksToPublish.length
+      });
+    }
+  }, [localCameraTrack, localMicrophoneTrack, tracksToPublish.length]);
 
   // Debug logging
   console.log('ChannelManager state:', { 
-    isJoined, 
     appId: appId ? 'Set' : 'Missing', 
     uid,
     tracksReady: tracksToPublish.length 
   });
 
-  const handleJoin = () => {
-    if (!appId) {
-      console.error('App ID is missing!');
-      return;
-    }
-    if (!uid) {
-      console.error('UID not generated yet!');
-      return;
-    }
-    console.log('Attempting to join with:', { appId: appId.substring(0, 8) + '...', uid, channelName });
-    setIsJoined(true);
-  };
-
   const handleLeave = () => {
-    setIsJoined(false);
+    if (onLeave) {
+      onLeave();
+    }
   };
 
   const handleToggleMute = async () => {
@@ -79,25 +75,6 @@ export default function ChannelManager({ channelName }: ChannelManagerProps) {
     }
   };
 
-  if (!isJoined) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        height: '100%',
-        gap: '16px',
-        color: 'white'
-      }}>
-        <h2>Ready to join {channelName}?</h2>
-        <button className="button" onClick={handleJoin}>
-          Join Call
-        </button>
-      </div>
-    );
-  }
-
   return (
     <>
       <VideoCall 
@@ -107,7 +84,7 @@ export default function ChannelManager({ channelName }: ChannelManagerProps) {
       />
       {/* Mute button */}
       <button 
-        className={` ${isMuted ? 'backgroundColorRed' : 'backgroundColorPrimary'}`}
+        className={`iconButton ${isMuted ? 'backgroundColorRed' : 'backgroundColorPrimary'}`}
         onClick={handleToggleMute}
         style={{ 
           position: 'fixed', 

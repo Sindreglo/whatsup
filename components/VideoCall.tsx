@@ -26,25 +26,40 @@ export default function VideoCall({ channelName, localCameraTrack, localMicropho
 
   return (
     <div className={styles.videoGrid} data-count={allUsers.length}>
-      {allUsers.map((user, index) => (
-        <div key={user.uid} className={styles.videoItem}>
-          {user.type === 'local' ? (
-            <LocalUser
-              cameraOn={true}
-              micOn={true}
-              videoTrack={localCameraTrack}
-              audioTrack={localMicrophoneTrack}
-            />
-          ) : (
-            <RemoteUser
-              user={remoteUsers.find(u => u.uid === user.uid)!}
-            />
-          )}
-          <div className={styles.userLabel}>
-            {user.type === 'local' ? 'You' : `User ${user.uid}`}
-          </div>
-        </div>
-      ))}
+      {allUsers.map((user, index) => {
+        if (user.type === 'local') {
+          return (
+            <div key={user.uid} className={styles.videoItem}>
+              <LocalUser
+                cameraOn={true}
+                micOn={true}
+                videoTrack={localCameraTrack}
+                audioTrack={localMicrophoneTrack}
+              />
+              <div className={styles.userLabel}>You</div>
+            </div>
+          );
+        } else {
+          const remoteUser = remoteUsers.find(u => u.uid === user.uid);
+          console.log('Rendering remote user:', {
+            uid: user.uid,
+            hasVideoTrack: !!remoteUser?.videoTrack,
+            hasAudioTrack: !!remoteUser?.audioTrack,
+            userObject: remoteUser
+          });
+          
+          return (
+            <div key={user.uid} className={styles.videoItem}>
+              <RemoteUser
+                user={remoteUser!}
+                playVideo={true}
+                playAudio={true}
+              />
+              <div className={styles.userLabel}>User {user.uid}</div>
+            </div>
+          );
+        }
+      })}
     </div>
   );
 }
