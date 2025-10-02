@@ -1,8 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import styles from './page.module.scss';
-import Call from '../components/Call';
+
+// Dynamically import Call component to prevent SSR issues with Agora SDK
+const Call = dynamic(() => import('../components/Call'), {
+  ssr: false,
+  loading: () => <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', color: 'white' }}>Loading call...</div>
+});
 
 export default function Home() {
   const [isJoined, setIsJoined] = useState(false);
@@ -21,7 +27,8 @@ export default function Home() {
     return (
       <Call 
         appId={appId}
-        channelName={channelName} 
+        channelName={channelName}
+        onLeave={handleLeaveCall}
       />
     );
   }

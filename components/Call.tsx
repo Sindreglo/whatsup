@@ -24,7 +24,7 @@ import { BsFillTelephoneFill } from 'react-icons/bs';
 import styles from './Call.module.scss';
 
 
-function Call(props: { appId: string; channelName: string }) {
+function Call(props: { appId: string; channelName: string; onLeave?: () => void }) {
   const client = useRTCClient(
     AgoraRTC.createClient({ codec: "vp8", mode: "rtc" })
   );
@@ -43,7 +43,7 @@ function Call(props: { appId: string; channelName: string }) {
       <div className={styles.controls}>
         <button
           className={`${styles.controlButton} ${styles.endCall}`}
-          onClick={() => (window.location.href = "/")}
+          onClick={() => props.onLeave && props.onLeave()}
           title="End Call"
         >
           <BsFillTelephoneFill className="icon" />

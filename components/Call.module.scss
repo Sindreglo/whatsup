@@ -1,4 +1,5 @@
 @use '../styles/variables' as *;
+@use 'sass:color';
 
 .videosContainer {
   display: flex;
@@ -136,7 +137,7 @@
 }
 
 .endCall:hover {
-  background-color: darken($color-danger, 8%);
+  background-color: color.adjust($color-danger, $lightness: -8%);
 }
 
 .micButton {
