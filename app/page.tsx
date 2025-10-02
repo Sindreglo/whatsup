@@ -2,12 +2,7 @@
 
 import { useState } from 'react';
 import styles from './page.module.scss';
-import AgoraRTC from 'agora-rtc-sdk-ng';
-import { AgoraRTCProvider } from 'agora-rtc-react';
-import ChannelManager from '../components/ChannelManager';
-
-// Initialize client outside component to prevent recreation
-const client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
+import Call from '../components/Call';
 
 export default function Home() {
   const [isJoined, setIsJoined] = useState(false);
@@ -22,13 +17,12 @@ export default function Home() {
   };
 
   if (isJoined) {
+    const appId = process.env.NEXT_PUBLIC_AGORA_APP_ID || '';
     return (
-      <AgoraRTCProvider client={client as any}>
-        <ChannelManager 
-          channelName={channelName} 
-          onLeave={handleLeaveCall}
-        />
-      </AgoraRTCProvider>
+      <Call 
+        appId={appId}
+        channelName={channelName} 
+      />
     );
   }
 

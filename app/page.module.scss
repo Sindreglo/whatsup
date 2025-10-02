@@ -7,16 +7,6 @@
   gap: 24px;
 }
 
-.card {
-  width: min(880px, 92%);
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 12px;
-  padding: 36px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-  text-align: center;
-}
-
 .header { margin-bottom: 20px; }
 
 .title {
@@ -34,7 +24,7 @@
 .actions { margin: 18px 0 24px 0; }
 
 .guide {
-  background: rgb(239, 239, 239);
+  background: #2c2c2c;
   border-radius: 8px;
   padding: 18px 16px;
   margin: 0 auto 18px auto;
