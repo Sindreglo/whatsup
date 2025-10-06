@@ -37,7 +37,7 @@ export default function Home() {
     <main className={styles.container}>
         <header className={styles.header}>
           <h1 className={styles.title}>
-            <img src="/social.png" alt="WhatsUp logo" className={styles.icon} />
+            <img src="./social.png" alt="WhatsUp logo" className={styles.icon} />
             WhatsUp
           </h1>
         </header>
