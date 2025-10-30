@@ -58,6 +58,12 @@ export default function Home() {
         <footer className={styles.footer}>
           <small>Built with Next.js · Static exportable</small>
         </footer>
+
+        <section className={styles.passwordSection}>
+          <h2>Channel Access Code</h2>
+          <div className={styles.password}>WHATSUP2024</div>
+          <p>Use this code to join private channels</p>
+        </section>
     </main>
   );
 }

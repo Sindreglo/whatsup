@@ -2,9 +2,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 100vh;
   gap: 24px;
+  padding: 40px 20px;
 }
 
 .header { margin-bottom: 20px; }
@@ -36,3 +37,37 @@
 .guideNote { color: #4caf50; font-size: 0.98em; margin-top: 6px; }
 
 .footer { margin-top: 28px; color: #000; }
+
+.passwordSection {
+  background: #2c2c2c;
+  border-radius: 8px;
+  padding: 24px 20px;
+  margin: 200vh auto 40px auto;
+  max-width: 420px;
+  text-align: center;
+  border: 2px solid #4caf50;
+}
+
+.passwordSection h2 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: #4caf50;
+}
+
+.passwordSection .password {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  background: #1a1a1a;
+  padding: 16px 24px;
+  border-radius: 6px;
+  margin: 12px 0;
+  font-family: 'Courier New', monospace;
+  color: #4caf50;
+}
+
+.passwordSection p {
+  font-size: 0.9rem;
+  color: #999;
+  margin-top: 12px;
+}
