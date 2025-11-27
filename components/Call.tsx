@@ -101,7 +101,7 @@ function Videos(props: {
   const { audioTracks } = useRemoteAudioTracks(remoteUsers);
   // Explicitly subscribe to video tracks for all remote users
   // This ensures video tracks are available before rendering RemoteUser components
-  useRemoteVideoTracks(remoteUsers);
+  const { videoTracks } = useRemoteVideoTracks(remoteUsers);
 
   // Debug logging for remote users
   console.log('Remote users:', remoteUsers.length, remoteUsers.map(u => ({ 
