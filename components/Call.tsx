@@ -23,6 +23,7 @@ import {
 } from "react-icons/md";
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import styles from './Call.module.scss';
+import { useDraggable } from '../hooks/useDraggable';
 
 
 function Call(props: { appId: string; channelName: string; onLeave?: () => void }) {
@@ -90,6 +91,12 @@ function Videos(props: {
   const { isLoading: isLoadingMic, localMicrophoneTrack } =
     useLocalMicrophoneTrack();
   const { isLoading: isLoadingCam, localCameraTrack } = useLocalCameraTrack();
+  
+  // Draggable local video
+  const { position, isDragging, handleMouseDown, handleTouchStart } = useDraggable({
+    initialCorner: "bottom-right",
+  });
+  
   // Enable/disable mic and camera based on props
   React.useEffect(() => {
     if (localMicrophoneTrack) localMicrophoneTrack.setEnabled(micOn);
@@ -145,7 +152,11 @@ function Videos(props: {
               </div>
             ))}
         </div>
-      <div className={styles.localVideo}>
+      <div 
+        className={`${styles.localVideo} ${styles[position.corner]} ${isDragging ? styles.dragging : ''}`}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+      >
         <LocalVideoTrack track={localCameraTrack} play={true} />
         <div className={styles.userLabel}>
           You
