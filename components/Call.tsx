@@ -11,6 +11,7 @@ import AgoraRTC, {
   useRTCClient,
   useRemoteAudioTracks,
   useRemoteUsers,
+  useRemoteVideoTracks,
 } from "agora-rtc-react";
 import React from "react";
 import {
@@ -98,6 +99,9 @@ function Videos(props: {
   }, [camOn, localCameraTrack]);
   const remoteUsers = useRemoteUsers();
   const { audioTracks } = useRemoteAudioTracks(remoteUsers);
+  // Explicitly subscribe to video tracks for all remote users
+  // This ensures video tracks are available before rendering RemoteUser components
+  const { videoTracks } = useRemoteVideoTracks(remoteUsers);
 
   // Debug logging for remote users
   console.log('Remote users:', remoteUsers.length, remoteUsers.map(u => ({ 
