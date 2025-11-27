@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 
 export type Corner = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
@@ -10,9 +10,6 @@ interface DraggablePosition {
 
 interface UseDraggableOptions {
   initialCorner?: Corner;
-  horizontalOffset?: number;
-  topOffset?: number;
-  bottomOffset?: number;
 }
 
 interface UseDraggableReturn {
@@ -25,9 +22,6 @@ interface UseDraggableReturn {
 export function useDraggable(options: UseDraggableOptions = {}): UseDraggableReturn {
   const {
     initialCorner = "bottom-right",
-    horizontalOffset = 16,
-    topOffset = 20,
-    bottomOffset = 72,
   } = options;
 
   const [position, setPosition] = useState<DraggablePosition>({ corner: initialCorner });
@@ -108,7 +102,7 @@ export function useDraggable(options: UseDraggableOptions = {}): UseDraggableRet
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
-      document.addEventListener("touchmove", handleTouchMove, { passive: false });
+      document.addEventListener("touchmove", handleTouchMove);
       document.addEventListener("touchend", handleTouchEnd);
       
       return () => {
